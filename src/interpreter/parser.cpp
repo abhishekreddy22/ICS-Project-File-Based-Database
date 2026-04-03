@@ -11,14 +11,27 @@ void parser() {
         vector<string> lower_tok;
         int l = tokens.size();
 
-        for (int i = 0; i<l; i++) {
+        // for (int i = 0; i<l; i++) {
+        //     string s = tokens[i];
+        //     string lower = "";
+        //     int k = s.size();
+        //     for (int j = 0; j<k; j++) {
+        //         lower += (char) tolower((unsigned char) s[j]);
+        //     }
+        //     lower_tok.push_back(lower);
+        // }
+
+        // making lower case tokens
+        for (int i=0; i<l; i++){
             string s = tokens[i];
-            string lower = "";
-            int k = s.size();
-            for (int j = 0; j<k; j++) {
-                lower += (char) tolower((unsigned char) s[j]);
+            for (int j=0; j<(int)s.size(); j++){
+                s[j] = (char)tolower(s[j]);
             }
-            lower_tok.push_back(lower);
+            lower_tok.push_back(s);
+        }
+
+        if (lower_tok[0] == "exit") {
+            break;
         }
 
         if (lower_tok[0] == "create" && lower_tok[1] == "table" && tokens[l-1] == ";" && tokens[3] == "(" && tokens[l-2] == ")") {
@@ -26,22 +39,7 @@ void parser() {
         }
         
         else if (lower_tok[0] == "insert" && lower_tok[1] == "into" && lower_tok[3] == "values" && tokens[4] == "(" && tokens[l-2] == ")" && tokens[l-1] == ";") {
-            int flag = 0;
-            for (int i = 5; i<l-2; i++) {
-                if (lower_tok[i] == "create" || lower_tok[i] == "table" || lower_tok[i] == ";" || lower_tok[i] == "insert" || lower_tok[i] == "into" || lower_tok[i] == "values" || lower_tok[i] == "select" || lower_tok[i] == "from" || lower_tok[i] == "where" || lower_tok[i] == "delete" || lower_tok[i] == "set") {
-                    flag = 1;
-                    break;
-                }
-            }
-
-            if (flag == 1) {
-                printf("Error: Attempt to insert to insert Keyword! \n");
-                printf("Keywords: CREATE, TABLE, INSERT, INTO, VALUES, SELECT, FROM, WHERE, DELETE, SET, ; \n");
-            }
-
-            else {
-                insert_into_table(tokens);
-            }
+            check_insertRow(tokens, lower_tok);
         }
 
         else if (lower_tok[0] == "select" && tokens[l-1] == ";") {
@@ -62,12 +60,12 @@ void parser() {
         }
 
         else if (lower_tok[0] == "delete" && lower_tok[l-3] == "from" && lower_tok[l-1] == ";" && lower_tok[l-4] == ")" && lower_tok[1] == "(") {
-            delete_row(tokens);
+            check_deleteRow(tokens);
         }
 
-        else if (lower_tok[0] == "update" && lower_tok[2] == "set" && lower_tok[4] == "=" && lower_tok[6] == "where" && lower_tok[8] == "=" && lower_tok[10] == ";") {
-            modify_row(tokens);
-        }
+        // else if (lower_tok[0] == "update" && lower_tok[2] == "set" && lower_tok[4] == "=" && lower_tok[6] == "where" && lower_tok[8] == "=" && lower_tok[10] == ";") {
+        //     check_modifyRow(tokens, lower_tok);
+        // }
 
         else if (lower_tok[0] == "display" && lower_tok[1] == "tables" && lower_tok[2] == ";" && lower_tok.size() == 3) {
             display_tables();
