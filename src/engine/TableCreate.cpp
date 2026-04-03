@@ -19,9 +19,9 @@ int create_new_table_schema(schema_t table_schema) {
         
         table_schema.num_rows = 0;
 
-        // TABLE_HEADER 13 bytes
-        fwrite(&table_schema.num_rows, sizeof(table_schema.num_rows), 1, schema_file);
-        fwrite(&table_schema.num_cols, sizeof(table_schema.num_cols), 1, schema_file);
+        // TABLE_HEADER : 13 bytes
+        fwrite(&table_schema.num_rows, sizeof(table_schema.num_rows), 1, schema_file); // number of rows
+        fwrite(&table_schema.num_cols, sizeof(table_schema.num_cols), 1, schema_file); // number of cols
 
         table_schema.total_row_len_inbytes = 0;
         for (int i=0; i<table_schema.num_cols; i++){
@@ -30,9 +30,9 @@ int create_new_table_schema(schema_t table_schema) {
             );
         }
 
-        fwrite(&table_schema.total_row_len_inbytes, sizeof(table_schema.total_row_len_inbytes), 1, schema_file);
+        fwrite(&table_schema.total_row_len_inbytes, sizeof(table_schema.total_row_len_inbytes), 1, schema_file); // total row length
 
-        // COL_DATA num_cols * 11 bytes
+        // COL_DATA : num_cols * 11 bytes
         for (int i=0; i<table_schema.num_cols; i++){
             fwrite(
                 &table_schema.column_data[i].is_primary_key,
@@ -53,7 +53,7 @@ int create_new_table_schema(schema_t table_schema) {
         }
 
 
-        // OFFSET TABLE num_cols * 8 bytes
+        // OFFSET TABLE : num_cols * 8 bytes
         size_t offset = 0;
         for (int i=0; i<table_schema.num_cols; i++){
             fwrite(&offset, sizeof(offset), 1, schema_file);
@@ -62,7 +62,7 @@ int create_new_table_schema(schema_t table_schema) {
             );
         }
 
-        // STRING DATA (1+num_cols)*255 bytes
+        // STRING DATA : (1+num_cols)*255 bytes
         char *buff = get_c_str_buffer_col_data(table_schema.table_name);
         fwrite(buff, sizeof(char), MAX_COL_LEN, schema_file);   
         delete[] buff; 
@@ -77,7 +77,7 @@ int create_new_table_schema(schema_t table_schema) {
             } else {
                 logger("[ERROR] Column name of ", LOG_ERROR);
                 logger(data, LOG_ERROR);
-                logger(" Exceeds limit of 255\n", LOG_ERROR);
+                logger("Exceeds limit of 255\n", LOG_ERROR);
                 return -1;
             }
         }

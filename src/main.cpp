@@ -202,11 +202,11 @@ void testing_modify()
 
 
 int main(){
-    // testing_engine();
-    parser();
+    testing_engine();
+    // parser();
     // testing_read();
     // sample_testing();
-    // testing_modify();
+    testing_modify();
     // vector<string> s=tokenize("create roll from Table(1,ashhar,3)");
     // for(auto i=s.begin();i<s.end();i++){
     //     cout<<(*i)<<endl;

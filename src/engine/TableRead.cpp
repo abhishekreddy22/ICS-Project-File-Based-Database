@@ -7,7 +7,7 @@ cell_data_t get_table_cell_data(int row, int col, schema_t schema_of_schema)
     FILE *file = fopen(schema_file_name.c_str(), "rb+");
 
     if (file == nullptr) {
-        perror("Fopen failed (get_table_cell_data)");
+        cout << " | error opening database file, it may not exist or may have been corrupted |" << endl; 
         return {};
     }
     
@@ -22,11 +22,7 @@ cell_data_t get_table_cell_data(int row, int col, schema_t schema_of_schema)
 
     int data_read_sb = th_bytes + (col * 11) + 1; // bytes needed to skip to get to col_data_type
     fseek(file, data_read_sb, SEEK_SET);
-    if(fread(&cellData.cell_data_type, 1, 1, file) != 1) 
-    { 
-        perror("data_type_read failed");
-        return {};
-    }
+    if(fread(&cellData.cell_data_type, 1, 1, file) != 1) return {};
 
     // READING FOR DATA
 
@@ -34,7 +30,7 @@ cell_data_t get_table_cell_data(int row, int col, schema_t schema_of_schema)
     FILE *fileTable = fopen(table_file_name.c_str(), "rb+");
 
     if (!fileTable) {
-        perror("Fopen failed (table in get_cell_data)");
+        cout << " | error opening database file, it may not exist or may have been corrupted |" << endl; 
         return {};
     }
 
@@ -43,7 +39,7 @@ cell_data_t get_table_cell_data(int row, int col, schema_t schema_of_schema)
 
     switch(cellData.cell_data_type){
         case STRING: {
-            int max_str_len_offset_sb = th_bytes + (col*11) + 3;
+            int max_str_len_offset_sb = th_bytes + (col * 11) + 3;
             fseek(file, max_str_len_offset_sb, SEEK_SET);
             
             // reading max_str_len
@@ -56,12 +52,14 @@ cell_data_t get_table_cell_data(int row, int col, schema_t schema_of_schema)
     }
 
     // READING OFFSET FOR PARTICULAR CELL
+    
     size_t col_offset;
     int col_offset_sb = th_bytes + (schema_of_schema.num_cols * 11) + (col * 8);
     fseek(file, col_offset_sb, SEEK_SET);
     if(fread(&col_offset, 1, sizeof(size_t), file) != sizeof(size_t)) return {};
 
     // Actually reading the data
+
     auto buffer = std::shared_ptr<char[]>(
     new char[col_size],
         std::default_delete<char[]>()
@@ -84,7 +82,7 @@ schema_t get_schema_from_schema(string schema_file_name)
     FILE *file = fopen(schema_file_name.c_str(), "rb");
 
     if (!file) {
-        perror("Fopen failed (get_schema_from_schema)");
+        cout << " | error opening database file, it may not exist or may have been corrupted |" << endl; 
         return {};
     }
 

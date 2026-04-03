@@ -11,7 +11,7 @@ int delete_row_from_table(int row, schema_t &table_schema) {
     string src_table_data_file_name = table_schema.table_name + "__table_data.bin";
     FILE* src_table_data_file = fopen(src_table_data_file_name.c_str(), "rb");
     if (!src_table_data_file) {
-        perror("Error Opening table data");
+        cout << " | error opening database file, it may not exist or may have been corrupted |" << endl;
         return -1;
     }
     
@@ -19,7 +19,7 @@ int delete_row_from_table(int row, schema_t &table_schema) {
     string temp_table_data_file_name = table_schema.table_name + "_temp_table_data.bin";
     FILE* temp_table_data_file = fopen(temp_table_data_file_name.c_str(), "wb");
     if (!temp_table_data_file) {
-        perror("Error Opening temp table data");
+        cout << " | error opening database file, it may not exist or may have been corrupted |" << endl;
         return -1;
     }
 
@@ -33,7 +33,6 @@ int delete_row_from_table(int row, schema_t &table_schema) {
 
         if (i != row && fread(buffer.data(), record_size, 1, src_table_data_file) == 1) {
             if (fwrite(buffer.data(), record_size, 1, temp_table_data_file) != 1) {
-                perror("fwrite failed to temp file in delete");
                 fclose(src_table_data_file);
                 fclose(temp_table_data_file);
                 remove(temp_table_data_file_name.c_str());
@@ -47,16 +46,10 @@ int delete_row_from_table(int row, schema_t &table_schema) {
     fclose(temp_table_data_file);
 
     // deleting the old file
-    if (remove(src_table_data_file_name.c_str()) != 0){
-        perror("Error removing old table data");
-        return -1;
-    }
-
+    if (remove(src_table_data_file_name.c_str()) != 0) return -1;
+    
     // renaming the temp file to become the new table data
-    if (rename(temp_table_data_file_name.c_str(), src_table_data_file_name.c_str()) != 0) {
-        perror("Error Renaming temp file to original file");
-        return -1;
-    }
+    if (rename(temp_table_data_file_name.c_str(), src_table_data_file_name.c_str()) != 0) return -1;
 
     // decrement count on-disk and in-memory through helper
     // `increment_num_rows` already adjusts the passed schema object, so we

@@ -15,7 +15,7 @@ int cell_data_modify(schema_t schema_of_schema, cell_data_t after, int row, int 
     FILE *file = fopen(schema_file_name.c_str(), "rb+");
 
     if (!file) {
-        perror("Fopen failed (schema in cell_data_modify)");
+        cout << " | error opening database file, it may not exist or may have been corrupted |" << endl; 
         return -1;
     }
 
@@ -23,7 +23,7 @@ int cell_data_modify(schema_t schema_of_schema, cell_data_t after, int row, int 
     FILE *fileTable = fopen(table_file_name.c_str(), "rb+");
 
     if(!fileTable) {
-        perror("Fopen failed (table in cell_data_modify)");
+        cout << " | error opening database file, it may not exist or may have been corrupted |" << endl; 
         return -2;
     }
 
@@ -46,11 +46,7 @@ int cell_data_modify(schema_t schema_of_schema, cell_data_t after, int row, int 
 
             if(strPtr)
             {
-                if(strPtr->length() > col_size) 
-                {
-                    perror("string length invalid"); //debugging
-                    return -1;
-                }
+                if(strPtr->length() > col_size) return -1;
             }   
 
             break;
@@ -62,8 +58,6 @@ int cell_data_modify(schema_t schema_of_schema, cell_data_t after, int row, int 
     // 2. DATA TYPE MISMATCH
 
     if (before.cell_data_type != after.cell_data_type) return -2; 
-
-    // cout << "unmodified: " << static_cast<char*>(before.cell_data.get()) << endl; // debugging
 
     // OVER-WRITING DATA
 
@@ -122,8 +116,6 @@ int cell_data_modify(schema_t schema_of_schema, cell_data_t after, int row, int 
         default:
             break;
     }
-
-    // cout << "data type: " << after.cell_data_type << endl; // debugging
 
     fclose(file);
     fclose(fileTable);

@@ -5,7 +5,7 @@ int increment_num_rows(schema_t &table_schema, int increment){
     
     FILE* schema_file = fopen(
         schema_file_name.c_str(),
-        "r+b"
+        "rb+"
     );
 
     if (!schema_file) return -1;
