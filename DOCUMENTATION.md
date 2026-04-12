@@ -149,7 +149,7 @@ create table employees (emp_id int primary key, name string(100), salary float);
 
 create table users (user_id int primary key, email string(50), active bool);
 
-create table products (product_code unsigned int primary key, productname string(100), price double);
+create table products (product_code unsigned_int primary key, productname string(100), price double);
 ```
 
 ### 2. INSERT INTO
