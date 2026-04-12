@@ -60,6 +60,6 @@ For detailed information about using the database system, refer to the following
 ## Build Commands
 
 - `make compile` - Compile the source code
-- `make run` - Compile and run the application
+- `make run` - run the application executable
 - `make clean` - Remove compiled binaries
 - `make rebuild` - Clean and recompile
