@@ -40,6 +40,7 @@ All commands must end with a semicolon (`;`). The system is case-insensitive for
 - `UPDATE` - Modify existing records
 - `DELETE` - Remove records from a table
 - `DISPLAY TABLES` - List all existing tables
+- `DISPLAY SCHEMA` - Show the schema of a specific table
 - `help` - Show available commands
 - `exit` - Close the application
 
@@ -293,7 +294,44 @@ This will show all available tables with their basic properties.
 - If tables are in a different directory, you need to run the application from that directory
 - If schema files are manually deleted or moved, the corresponding tables will not appear in the list
 
-### 7. Additional Commands
+### 7. DISPLAY SCHEMA
+
+Show the schema of a specific table, including column names, data types, and primary key information.
+
+#### Syntax
+
+```
+display schema table_name;
+```
+
+#### Parameters
+
+- `table_name` - Name of the table whose schema you want to view (case-insensitive)
+
+#### How It Works
+
+This command reads the schema file (`table_name__schema_data.bin`) for the specified table and displays detailed information about:
+- Column names and their order
+- Data types for each column
+- Which column is designated as the primary key
+- Maximum length for string columns
+
+#### Example
+
+```sql
+display schema employees;
+```
+
+This will show the complete schema structure of the employees table, including all columns, their data types, and primary key designation.
+
+#### Important Notes
+
+- The table must exist for the command to work
+- If the table does not exist, an error message will be displayed
+- The command is case-insensitive for table names
+- This is useful for understanding table structure before performing operations
+
+### 8. Additional Commands
 
 #### Help
 
@@ -329,6 +367,8 @@ update students set gpa = 3.90 where roll_id = 1002;
 select name, gpa from students;
 
 delete (2) from students;
+
+display schema students;
 ```
 
 ### Example 2: Managing an Inventory System
