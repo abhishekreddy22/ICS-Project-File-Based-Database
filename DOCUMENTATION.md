@@ -215,7 +215,7 @@ Modify values in existing records.
 #### Syntax
 
 ```
-update table_name set column_name = new_value where primary_key_column = value;
+update table_name set column_name = new_value where column_name = value;
 ```
 
 #### Parameters
@@ -223,18 +223,32 @@ update table_name set column_name = new_value where primary_key_column = value;
 - `table_name` - Table containing records to update
 - `column_name` - Column to update (after SET)
 - `new_value` - New value for the column
-- `primary_key_column` - The primary key column of the table
-- `value` - The value of the primary key to identify which record to update
+- `column_name` (in WHERE clause) - Any column in the table that can be used for filtering
+- `value` - The value to match in the WHERE clause column
 - String values should be enclosed in single quotes: `'value'`
+
+#### Important Notes
+
+- The WHERE clause can be applied to **any column** in the table, not just the primary key
+- All rows that match the WHERE condition will be updated
+- If multiple rows match the condition, all matching rows will be updated
+- Use the primary key in the WHERE clause for updating specific individual records
+- Use other columns in the WHERE clause when you want to update multiple records that share the same value
 
 #### Examples
 
 ```sql
+-- Update a specific record using primary key
 update employees set salary = 55000 where emp_id = 1;
 
-update users set active = false where user_id = 101;
+-- Update multiple records using a non-primary key column
+update employees set salary = 50000 where department = 'Sales';
 
-update products set price = 29.99 where product_code = 1001;
+-- Update records using any column
+update users set active = false where email = 'inactive@example.com';
+
+-- Update products with a specific condition
+update products set price = 29.99 where category = 'Electronics';
 ```
 
 ### 5. DELETE

@@ -15,12 +15,12 @@ This project implements a complete database management system with a command-lin
 - Simple SQL-like command interface
 - File-based persistence with no external dependencies
 
-## Team Members
+## The Engineering Team
 
-- Harish Babu
-- Abhishek
-- Rahul
-- Ashhar Ansari
+- Harish Babu (B25BB1012)
+- Abhishek (B25CM1001)
+- Rahul (B25ME1063)
+- Ashhar Ansari (B25EE1009)
 
 ## Getting Started
 
@@ -28,7 +28,7 @@ This project implements a complete database management system with a command-lin
 
 - GCC compiler (g++) with C++17 support
 - GNU Make
-- Linux or Unix-like environment
+- Linux Environment
 
 ### Building from Source
 
